@@ -3,12 +3,21 @@
 
 require 'expect'
 
+# Modify to your environment.
+module Configure
+
+  IO_Target = lambda do
+    # Open target proc.
+    IO.popen("./target/c/target", "w+")
+  end
+end
+
 module Console
   @@io = nil
 
   def self.reset
     @@io.close if @@io and not @@io.closed?
-    @@io = IO.popen("./target", "w+")
+    @@io = Configure::IO_Target.()
   end
 
   def self.verify(input, format)
